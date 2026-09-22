@@ -1,0 +1,30 @@
+# Render Blueprint - פריסה בלחיצה אחת.
+# ב-Render: New > Blueprint, בוחרים את הריפו הזה, ומגדירים את TELEGRAM_BOT_TOKEN.
+services:
+  - type: web
+    name: python-teacher-bot
+    runtime: python
+    plan: free
+    region: frankfurt
+    buildCommand: pip install -r requirements.txt
+    startCommand: python main.py
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.11.9"
+      # הטוקן מ-@BotFather. sync: false = מזינים אותו ידנית בדשבורד.
+      - key: TELEGRAM_BOT_TOKEN
+        sync: false
+      # אופציונלי: מפעיל /ask ובדיקת תרגילים חכמה.
+      - key: ANTHROPIC_API_KEY
+        sync: false
+      - key: CLAUDE_MODEL
+        value: claude-opus-5
+      # נוצר אוטומטית - מאמת שהעדכונים באמת הגיעו מטלגרם.
+      - key: WEBHOOK_SECRET
+        generateValue: true
+      - key: ENABLE_CODE_RUNNER
+        value: "false"
+      # בתוכנית החינמית אין דיסק קבוע; הנתונים נמחקים בכל דיפלוי.
+      # להתקדמות מתמשכת: שדרגו תוכנית, הוסיפו Disk ב-/var/data והציבו DATA_DIR=/var/data
+      - key: DATA_DIR
+        value: /tmp/pythonbot-data
